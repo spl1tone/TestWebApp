@@ -1,0 +1,19 @@
+﻿@model Product
+
+<h1>Create New Product</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Name">Product Name</label>
+        <input asp-for="Name" class="form-control" required/>
+    </div>
+    <div class="form-group">
+        <label asp-for="Price">Product Price</label>
+        <input asp-for="Price" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label asp-for="Count">Product Count</label>
+        <input asp-for="Count" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>

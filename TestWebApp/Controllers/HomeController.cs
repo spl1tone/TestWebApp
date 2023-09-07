@@ -13,11 +13,6 @@ namespace TestWebApp.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index ()
-        {
-            return View();
-        }
-
         public IActionResult Privacy ()
         {
             return View();
@@ -28,5 +23,32 @@ namespace TestWebApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        private static List<Product> products = new List<Product>();
+
+        public IActionResult Index ()
+        {
+            return View(products);
+        }
+
+        public IActionResult Create ()
+        {
+            Product newProduct = new Product();
+            return View(newProduct);
+        }
+
+        [HttpPost]
+        public IActionResult Create (Product product)
+        {
+            product.Id = products.Count + 1;
+            products.Add(product);
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public IActionResult AddProduct ()
+        {
+            return RedirectToAction("Create");
+        }
+
     }
 }
