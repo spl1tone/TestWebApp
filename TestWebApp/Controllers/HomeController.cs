@@ -36,8 +36,11 @@ namespace TestWebApp.Controllers
         [HttpPost]
         public IActionResult CreateProduct ([FromBody] Product product)
         {
-            if (product == null) {
-                return BadRequest("Invalid product data");
+            var validator = new Validator();
+            var validationResult = validator.Validate(product);
+
+            if (!validationResult.IsValid) {
+                return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
             }
 
             _context.Products.Add(product);
