@@ -9,23 +9,24 @@ namespace TestWebApp.Controllers
     [ApiController]
     public class ProductsApiController : ControllerBase
     {
-        private static List<Product> products = new List<Product>
+        private readonly ProductDbContext _context;
+
+        public ProductsApiController (ProductDbContext context)
         {
-            new Product { Id = 1, Name = "Product1", Price = 11f, Count = 5 },
-            new Product { Id = 2, Name = "Product2", Price = 15.99f, Count = 3 },
-            new Product { Id = 3, Name = "Product3", Price = 2.33f, Count = 4 },
-        };
+            _context = context;
+        }
 
         [HttpGet]
         public IActionResult GetAllProducts ()
         {
+            var products = _context.Products.ToList();
             return Ok(products);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetProduct (int id)
         {
-            var product = products.Find(p => p.Id == id);
+            var product = _context.Products.Find(id);
             if (product == null) {
                 return NotFound("Product not found");
             }
@@ -38,8 +39,9 @@ namespace TestWebApp.Controllers
             if (product == null) {
                 return BadRequest("Invalid product data");
             }
-            product.Id = products.Count + 1;
-            products.Add(product);
+
+            _context.Products.Add(product);
+            _context.SaveChanges();
 
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
         }
@@ -47,12 +49,13 @@ namespace TestWebApp.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteProduct (int id)
         {
-            var product = products.Find(p => p.Id == id);
+            var product = _context.Products.Find(id);
             if (product == null) {
                 return NotFound("Product not found");
             }
 
-            products.Remove(product);
+            _context.Products.Remove(product);
+            _context.SaveChanges();
 
             return NoContent();
         }

@@ -1,10 +1,15 @@
 using Newtonsoft.Json;
+using TestWebApp.Models;
+
 namespace TestWebApp;
 
 public class Program
 {
     public static void Main (string[] args)
     {
+
+
+
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
@@ -48,6 +53,8 @@ public class Program
             }
         });
 
+        var test = new ProductTest();
+        test.StartTest();
 
         app.Run();
     }
